@@ -14,6 +14,7 @@ from pathlib import Path
 from datetime import timedelta
 from decouple import config
 import os
+import dj_database_url
 #from dotenv import load_dotenv
 
 #load_dotenv()
@@ -27,9 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
-
+DEBUG = config('DEBUG', default=True, cast=bool)
 #SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
 
 ALLOWED_HOSTS = []
 
@@ -91,7 +92,17 @@ WSGI_APPLICATION = 'Project.wsgi.application'
  #      'ENGINE': 'django.db.backends.sqlite3',
   # }
 #}
-DATABASES ={
+
+ENVIRONMENT = config('ENVIRONMENT', default='development')
+
+
+if ENVIRONMENT == 'production':
+    DATABASES = {
+        'default': dj_database_url.parse(config('DATABASE_URL'))
+    }
+
+else:   
+    DATABASES ={
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DB_NAME', default='edubridge_db'),
@@ -100,7 +111,8 @@ DATABASES ={
         'HOST': 'localhost',
         'PORT': '5432',
     }
-}
+} 
+
 
 CACHES = {
     "default": {
