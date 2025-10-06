@@ -28,11 +28,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="").split(",")
 #SECURITY WARNING: don't run with debug turned on in production!
 
-
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -157,9 +157,9 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp-relay.brevo.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config("HOST_USER")   # your Brevo login
-EMAIL_HOST_PASSWORD = config("SENDGRID_API_KEY")       # your SMTP key (not account password!)
-DEFAULT_FROM_EMAIL = config("VERIFIED_USER")  # must be verified in Brevo
+#EMAIL_HOST_USER = config("HOST_USER")   # your Brevo login
+#EMAIL_HOST_PASSWORD = config("SENDGRID_API_KEY")       # your SMTP key (not account password!)
+#DEFAULT_FROM_EMAIL = config("VERIFIED_USER")  # must be verified in Brevo
 
 
 
