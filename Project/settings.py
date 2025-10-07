@@ -15,9 +15,9 @@ from datetime import timedelta
 from decouple import config
 import os
 import dj_database_url
-#from dotenv import load_dotenv
+from dotenv import load_dotenv
 
-#load_dotenv()
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,9 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="").split(",")
+SECRET_KEY = os.environ.get('SECRET_KEY')
+DEBUG = os.environ.get('DEBUG', False, ).lower()==True
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 #SECURITY WARNING: don't run with debug turned on in production!
 
 #ALLOWED_HOSTS = []
@@ -93,31 +93,20 @@ WSGI_APPLICATION = 'Project.wsgi.application'
   # }
 #}
 
-ENVIRONMENT = config('ENVIRONMENT', default='development')
+#ENVIRONMENT = os.environ.get('ENVIRONMENT', 'development')
+
+database_url= os.environ.get('DATABASE_URL')
 
 
-if ENVIRONMENT == 'production':
-    DATABASES = {
-        'default': dj_database_url.parse(config('DATABASE_URL'))
-    }
-
-else:   
-    DATABASES ={
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME', default='edubridge_db'),
-        'USER': config('DB_USER', default='edubridge_admin'),
-        'PASSWORD': config('DB_PASSWORD', default='George@20'),
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-} 
-
+DATABASES = {
+    "default": dj_database_url.parse(database_url)
+}
+    
 
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",  # DB 1 in Redis
+        "LOCATION":  os.environ.get("REDIS_URL", "redis://127.0.0.1:6379/1"), # DB 1 in Redis
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -153,13 +142,7 @@ AUTH_USER_MODEL = 'user_auth.User'
 
 # settings.py
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp-relay.brevo.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-#EMAIL_HOST_USER = config("HOST_USER")   # your Brevo login
-#EMAIL_HOST_PASSWORD = config("SENDGRID_API_KEY")       # your SMTP key (not account password!)
-#DEFAULT_FROM_EMAIL = config("VERIFIED_USER")  # must be verified in Brevo
+
 
 
 
